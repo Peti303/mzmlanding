@@ -1,0 +1,12 @@
+{
+  "name": "mzm-stats-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local --persist-to .wrangler-state",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute mzm-stats --remote --file=schema.sql",
+    "db:init:local": "wrangler d1 execute mzm-stats --local --persist-to .wrangler-state --file=schema.sql"
+  },
+  "devDependencies": { "wrangler": "^4.0.0" }
+}

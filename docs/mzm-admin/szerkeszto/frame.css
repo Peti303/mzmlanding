@@ -1,0 +1,21 @@
+/* Az iframe-ben megjelenő szerkesztő-réteg (kijelölés, hover, fogantyú) */
+.mzm-ui { position: fixed; inset: 0; pointer-events: none; z-index: 2147483000; overflow: hidden; }
+.mzm-ov { position: absolute; box-sizing: border-box; border-radius: 3px; display: none; }
+.mzm-ov.on { display: block; }
+.mzm-hover { outline: 1.5px dashed #ffcf00; outline-offset: 0; }
+.mzm-sel { outline: 2px solid #ffcf00; outline-offset: 0; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55); }
+.mzm-chip {
+  position: absolute; left: -2px; bottom: 100%; margin-bottom: 3px; white-space: nowrap;
+  background: #ffcf00; color: #17181a; font: 700 11px/1 Inter, system-ui, sans-serif; padding: 5px 8px; border-radius: 6px 6px 6px 0;
+}
+.mzm-chip.below { bottom: auto; top: 100%; margin: 3px 0 0; border-radius: 0 6px 6px 6px; }
+.mzm-handle {
+  position: absolute; right: -8px; bottom: -8px; width: 16px; height: 16px; border-radius: 50%; display: none;
+  background: #ffcf00; border: 2px solid #17181a; pointer-events: auto; cursor: nwse-resize;
+}
+.mzm-handle.on { display: block; }
+.mzm-handle.v { cursor: ns-resize; }
+html.is-edit [data-e] { cursor: pointer; }
+html.is-edit .ba { cursor: pointer; }
+html.is-edit [contenteditable="true"] { outline: 2px solid #fff !important; cursor: text !important; user-select: text; -webkit-user-select: text; min-width: 1em; }
+html.is-edit.mzm-dragging, html.is-edit.mzm-dragging * { user-select: none !important; }
