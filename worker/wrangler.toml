@@ -7,7 +7,7 @@ compatibility_date = "2024-11-01"
 [vars]
 # Az oldal pontos címe (sémával, útvonal nélkül) – csak innen fogad mérést és admin kérést
 ALLOWED_ORIGIN = "https://peti303.github.io"
-ADMIN_USERNAME = "admin"
+ADMIN_USERNAME = "teszt"   # tesztelés: teszt / 123 – éles használat előtt cseréld!
 
 [[d1_databases]]
 binding = "DB"

@@ -305,6 +305,13 @@ const server = http.createServer(async (req, res) => {
     const { pathname } = new URL(req.url, 'http://x');
 
     if (pathname === '/api/track' && req.method === 'POST') return await handleTrack(req, res);
+    if (pathname === '/js/config.js') {
+      // a Node szerver maga szolgálja ki az API-t -> ugyanarra a címre mér (a Pages-es alapértelmezés: nincs szerver)
+      return send(res, 200, 'window.MZM_CONFIG = { apiBase: "" };\n', {
+        'Content-Type': MIME['.js'],
+        'Cache-Control': 'no-cache',
+      });
+    }
     if (pathname === '/healthz') return sendJson(res, 200, { ok: true });
     if (pathname === ADMIN_PATH || pathname.startsWith(ADMIN_PATH + '/')) return await handleAdmin(req, res, pathname);
 

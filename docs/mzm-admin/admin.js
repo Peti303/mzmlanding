@@ -49,7 +49,7 @@
         body: JSON.stringify({ username: $('username').value, password: $('password').value }),
       });
       const j = await res.json().catch(() => ({}));
-      if (!res.ok) { err.textContent = j.error || 'Sikertelen belépés.'; err.hidden = false; $('password').select(); }
+      if (!res.ok) { err.textContent = j.error || `Az admin szerver nem válaszol megfelelően (HTTP ${res.status}). Ellenőrizd a statisztika-szerver beállítását.`; err.hidden = false; $('password').select(); }
       else { if (CROSS) setToken(j.token); $('password').value = ''; show(true); }
     } catch (_) { err.textContent = 'Hálózati hiba, próbáld újra.'; err.hidden = false; }
     btn.disabled = false; btn.textContent = 'Belépés';

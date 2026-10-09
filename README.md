@@ -51,6 +51,10 @@ npm start            # http://localhost:3000
 
 ### Admin belépés
 
+Teszteléshez: `npm run start:test` – belépés: **teszt / 123** (a `.env.test` fájlból; csak tesztre való, élesben ne használd).
+
+Élesben:
+
 Állítsd be környezeti változóként (vagy `.env` fájlban, lásd `.env.example`):
 
 ```
