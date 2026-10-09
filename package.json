@@ -1,0 +1,15 @@
+{
+  "name": "mzmlanding",
+  "version": "1.0.0",
+  "description": "MZM Construction – landing oldal és /mzm-admin statisztika dashboard",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node scripts/seed-demo.js",
+    "test": "node --test test/*.test.js"
+  },
+  "license": "UNLICENSED"
+}

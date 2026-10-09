@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#17181a">
+  <title>MZM Admin – Statisztika</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/mzm-admin/assets/admin.css">
+</head>
+<body>
+
+<!-- ============ Bejelentkezés ============ -->
+<main id="loginView" class="login" hidden>
+  <form id="loginForm" class="login-card" autocomplete="on" novalidate>
+    <img src="/img/logo.svg" width="176" height="38" alt="MZM Construction">
+    <h1>Bejelentkezés</h1>
+    <p class="muted">Statisztika és vezérlőpult</p>
+    <label>Felhasználónév
+      <input id="username" name="username" type="text" autocomplete="username" required autofocus>
+    </label>
+    <label>Jelszó
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <p id="loginError" class="error" role="alert" hidden></p>
+    <button class="btn" type="submit" id="loginBtn">Belépés</button>
+  </form>
+</main>
+
+<!-- ============ Dashboard ============ -->
+<div id="dashView" hidden>
+  <header class="top">
+    <div class="wrap top-in">
+      <div class="top-brand"><img src="/img/logo.svg" width="150" height="32" alt="MZM Construction"><span class="pill">Admin</span></div>
+      <div class="top-actions">
+        <span class="live-dot" title="Automatikus frissítés 60 másodpercenként"><i></i> <span id="updated">–</span></span>
+        <button class="btn btn-ghost" id="logoutBtn" type="button">Kilépés</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap dash">
+    <div class="toolbar">
+      <div class="seg" role="tablist" aria-label="Időszak">
+        <button role="tab" id="segWeek" class="is-active" aria-selected="true" data-period="week">Hét</button>
+        <button role="tab" id="segMonth" aria-selected="false" data-period="month">Hónap</button>
+      </div>
+      <div class="pager">
+        <button class="icon-btn" id="prevBtn" type="button" aria-label="Előző időszak">‹</button>
+        <strong id="rangeLabel" aria-live="polite">–</strong>
+        <button class="icon-btn" id="nextBtn" type="button" aria-label="Következő időszak">›</button>
+        <button class="btn btn-ghost btn-sm" id="todayBtn" type="button">Ma</button>
+      </div>
+    </div>
+
+    <section class="kpis" aria-label="Összesítő">
+      <article class="kpi kpi-main">
+        <p class="kpi-label">Látogatók</p>
+        <p class="kpi-value" id="kVisitors">–</p>
+        <p class="kpi-delta" id="dVisitors"></p>
+        <p class="kpi-note" id="nVisitors"></p>
+      </article>
+      <article class="kpi">
+        <p class="kpi-label">Oldalmegtekintés</p>
+        <p class="kpi-value" id="kViews">–</p>
+        <p class="kpi-delta" id="dViews"></p>
+      </article>
+      <article class="kpi">
+        <p class="kpi-label">Ajánlatkérés gombnyomás</p>
+        <p class="kpi-value" id="kCta">–</p>
+        <p class="kpi-delta" id="dCta"></p>
+      </article>
+      <article class="kpi">
+        <p class="kpi-label">Gombra kattintók aránya</p>
+        <p class="kpi-value" id="kRate">–</p>
+        <p class="kpi-note">a látogatók hány %-a nyomott ajánlatkérésre</p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2 id="chartTitle">Napi látogatók</h2><span class="muted" id="chartSub"></span></div>
+      <div id="chart" class="chart" role="img" aria-label="Napi látogatók oszlopdiagramja"></div>
+      <div id="tip" class="tip" hidden></div>
+    </section>
+
+    <div class="grid3">
+      <section class="panel"><div class="panel-head"><h2>Honnan jönnek?</h2></div><div id="srcBars" class="hbars"></div></section>
+      <section class="panel"><div class="panel-head"><h2>Milyen eszközről?</h2></div><div id="devBars" class="hbars"></div></section>
+      <section class="panel"><div class="panel-head"><h2>Melyik gomb hozza?</h2></div><div id="ctaBars" class="hbars"></div></section>
+    </div>
+
+    <div class="grid2">
+      <section class="panel"><div class="panel-head"><h2>Mikor érkeznek?</h2><span class="muted">óra szerint (Budapest)</span></div><div id="hours" class="hours"></div></section>
+      <section class="panel"><div class="panel-head"><h2>Hirdetési kampányok</h2><span class="muted">utm_campaign alapján</span></div><div id="campBars" class="hbars"></div></section>
+    </div>
+
+    <p class="foot muted small">A látogatókat süti nélkül, anonim (havonta változó) azonosítóval számoljuk; a botokat kiszűrjük. Egy látogató a hónapon belül egyszer számít, akárhányszor tér vissza.</p>
+  </main>
+</div>
+
+<script src="/mzm-admin/assets/admin.js" defer></script>
+</body>
+</html>
