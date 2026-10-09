@@ -3,12 +3,13 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const EDIT = document.documentElement.classList.contains('is-edit'); // a szerkesztő iframe-jében vagyunk
+  const resolveSrc = (src) => (window.MZMContent ? window.MZMContent.resolveSrc(src) : src);
 
   /* ---------------- látogatottság mérése (süti nélkül, anonim) ---------------- */
   const API_BASE = (window.MZM_CONFIG || {}).apiBase;
   function track(type, cta) {
-    if (typeof API_BASE !== 'string') return; // nincs statisztika-szerver beállítva
+    if (EDIT || typeof API_BASE !== 'string') return; // szerkesztőben / szerver nélkül nincs mérés
     try {
       const url = API_BASE.replace(/\/$/, '') + '/api/track';
       const body = JSON.stringify({
@@ -31,8 +32,16 @@
   document.addEventListener('click', (e) => {
     const el = e.target.closest('[data-cta], [data-top]');
     if (!el) return;
+    if (EDIT) return; // a szerkesztő kezeli a kattintást
     e.preventDefault();
     if (el.dataset.cta) track('cta', el.dataset.cta);
+    // ha a szerkesztőben megadtak ajánlatkérés-linket, oda visz; különben az oldal tetejére
+    const url = ((window.MZM_CONTENT || {}).settings || {}).ctaUrl;
+    if (el.dataset.cta && url) {
+      if (url.startsWith('#')) { const t = document.querySelector(url); t ? t.scrollIntoView({ behavior: 'smooth' }) : toTop(); }
+      else location.href = url;
+      return;
+    }
     toTop();
   });
 
@@ -52,13 +61,14 @@
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
   onScroll();
-  $('#year').textContent = new Date().getFullYear();
+  const yearEl = $('#year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ---------------- megjelenési animáció + számlálók ---------------- */
   const countUp = (el) => {
     const end = Number(el.dataset.count);
     const suffix = el.dataset.suffix || '';
-    if (reduceMotion) return;
+    if (reduceMotion || EDIT || !el.hasAttribute('data-count')) return;
     const t0 = performance.now();
     const dur = 1400;
     const step = (t) => {
@@ -83,11 +93,19 @@
   }
 
   /* ---------------- előtte–utána csúszka ---------------- */
-  const PAIRS = [
+  const DEFAULT_PAIRS = [
     { render: 'img/projects/house-render.jpg', real: 'img/projects/house-real.jpg' },
     { render: 'img/projects/living-render.jpg', real: 'img/projects/living-real.jpg' },
     { render: 'img/projects/bath-render.jpg', real: 'img/projects/bath-real.jpg' },
   ];
+  // a szerkesztőben lecserélt képek (ba0.render, ba1.real, …) felülírják az alapértelmezetteket
+  const getPairs = () => {
+    const els = ((window.MZM_CONTENT || {}).els) || {};
+    return DEFAULT_PAIRS.map((p, i) => ({
+      render: els[`ba${i}.render`]?.src ? resolveSrc(els[`ba${i}.render`].src) : p.render,
+      real: els[`ba${i}.real`]?.src ? resolveSrc(els[`ba${i}.real`].src) : p.real,
+    }));
+  };
   const ba = $('#ba');
   if (ba) {
     const range = $('.ba-range', ba);
@@ -145,7 +163,7 @@
     range.addEventListener('input', () => { touched(); target = current = Number(range.value); paint(); });
 
     // bemutató: első láthatóságkor „végigsöpör”, hogy látszódjon, hogy interaktív
-    if (!reduceMotion && 'IntersectionObserver' in window) {
+    if (!reduceMotion && !EDIT && 'IntersectionObserver' in window) {
       const demoIO = new IntersectionObserver((entries) => {
         if (!entries[0].isIntersecting || interacted) return;
         demoIO.disconnect();
@@ -159,7 +177,7 @@
 
     // projekt-fülek
     const swap = (i) => {
-      const pair = PAIRS[i];
+      const pair = getPairs()[i];
       if (!pair) return;
       ba.classList.add('is-switching');
       setTimeout(() => {
@@ -180,7 +198,7 @@
       swap(i);
     }));
     // a többi képpár előtöltése, amint az oldal tétlen
-    const preload = () => PAIRS.slice(1).forEach((p) => { new Image().src = p.render; new Image().src = p.real; });
+    const preload = () => getPairs().slice(1).forEach((p) => { new Image().src = p.render; new Image().src = p.real; });
     ('requestIdleCallback' in window) ? requestIdleCallback(preload, { timeout: 4000 }) : setTimeout(preload, 2500);
     paint();
   }

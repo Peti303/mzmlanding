@@ -6,6 +6,7 @@ import { config, ROOT } from './lib/env.js';
 import { addEvent, flush, eventsForDay } from './lib/store.js';
 import { getStats } from './lib/analytics.js';
 import { dayKey } from './lib/dates.js';
+import { getContent, saveContent, saveUpload, uploadsDir, UPLOAD_MIME, UPLOAD_NAME, MAX_UPLOAD } from './lib/content-store.js';
 import { isBot, deviceType, classifySource, clean } from './lib/classify.js';
 import {
   verifyLogin,
@@ -40,15 +41,16 @@ const COMPRESSIBLE = new Set(['.html', '.css', '.js', '.json', '.svg', '.txt', '
 
 const SECURITY_HEADERS = {
   'Content-Security-Policy':
-    "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'",
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'X-Frame-Options': 'DENY',
+  'X-Frame-Options': 'SAMEORIGIN',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
 };
 
 const trackLimiter = new RateLimiter(90, 60_000);
 const loginLimiter = new RateLimiter(5, 15 * 60_000);
+const uploadLimiter = new RateLimiter(120, 60 * 60_000);
 setInterval(() => {
   trackLimiter.sweep();
   loginLimiter.sweep();
@@ -90,6 +92,22 @@ function readBody(req, limit = 4096) {
       } else chunks.push(c);
     });
     req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    req.on('error', reject);
+  });
+}
+
+function readBuffer(req, limit) {
+  return new Promise((resolve, reject) => {
+    let size = 0;
+    const chunks = [];
+    req.on('data', (c) => {
+      size += c.length;
+      if (size > limit) {
+        reject(Object.assign(new Error('too large'), { status: 413 }));
+        req.destroy();
+      } else chunks.push(c);
+    });
+    req.on('end', () => resolve(Buffer.concat(chunks)));
     req.on('error', reject);
   });
 }
@@ -274,6 +292,35 @@ async function handleAdminApi(req, res, route) {
     return sendJson(res, 200, { ok: true }, { 'Set-Cookie': cookieHeader(req, '', 0) });
   }
 
+  if (route === '/api/content' && req.method === 'PUT') {
+    if (!getSession(req)) return sendJson(res, 401, { error: 'Nincs bejelentkezve.' });
+    if (!sameOrigin(req)) return sendJson(res, 403, { error: 'Tiltott kérés.' });
+    let body;
+    try {
+      body = await readJson(req, 320 * 1024);
+    } catch (e) {
+      return sendJson(res, e.status || 400, { error: 'Hibás vagy túl nagy kérés.' });
+    }
+    try {
+      return sendJson(res, 200, { ok: true, content: saveContent(body) });
+    } catch (e) {
+      return sendJson(res, e.status || 500, { error: 'A mentés nem sikerült.' });
+    }
+  }
+
+  if (route === '/api/upload' && req.method === 'POST') {
+    if (!getSession(req)) return sendJson(res, 401, { error: 'Nincs bejelentkezve.' });
+    if (!sameOrigin(req)) return sendJson(res, 403, { error: 'Tiltott kérés.' });
+    if (!uploadLimiter.take(clientIp(req))) return sendJson(res, 429, { error: 'Túl sok feltöltés, próbáld később.' });
+    try {
+      const name = saveUpload(await readBuffer(req, MAX_UPLOAD));
+      return sendJson(res, 200, { ok: true, src: `uploads/${name}` });
+    } catch (e) {
+      const msg = e.status === 415 ? 'Csak JPG, PNG, WebP, GIF vagy AVIF kép tölthető fel.' : 'A kép túl nagy vagy hibás (max. 6 MB).';
+      return sendJson(res, e.status || 400, { error: msg });
+    }
+  }
+
   if (route === '/api/stats' && req.method === 'GET') {
     if (!getSession(req)) return sendJson(res, 401, { error: 'Nincs bejelentkezve.' });
     const url = new URL(req.url, 'http://x');
@@ -288,8 +335,8 @@ async function handleAdminApi(req, res, route) {
 function handleAdmin(req, res, pathname) {
   const route = pathname.slice(ADMIN_PATH.length) || '/';
   if (route.startsWith('/api/')) return handleAdminApi(req, res, route);
-  if (pathname === ADMIN_PATH) {
-    res.writeHead(301, { Location: ADMIN_PATH + '/' });
+  if (pathname === ADMIN_PATH || pathname === ADMIN_PATH + '/szerkeszto') {
+    res.writeHead(301, { Location: pathname + '/' });
     return res.end();
   }
   // az admin felület statikus fájl (docs/mzm-admin/), a kereső ne indexelje
@@ -311,6 +358,17 @@ const server = http.createServer(async (req, res) => {
         'Content-Type': MIME['.js'],
         'Cache-Control': 'no-cache',
       });
+    }
+    if (pathname === '/api/content' && (req.method === 'GET' || req.method === 'HEAD')) {
+      return sendJson(res, 200, getContent());
+    }
+    if (pathname.startsWith('/uploads/') && (req.method === 'GET' || req.method === 'HEAD')) {
+      const name = pathname.slice('/uploads/'.length);
+      if (!UPLOAD_NAME.test(name)) return send(res, 404, 'Not found');
+      return serveFile(req, res, uploadsDir, name, {
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Content-Type': UPLOAD_MIME[name.split('.').pop()],
+      }) || send(res, 404, 'Not found');
     }
     if (pathname === '/healthz') return sendJson(res, 200, { ok: true });
     if (pathname === ADMIN_PATH || pathname.startsWith(ADMIN_PATH + '/')) return await handleAdmin(req, res, pathname);

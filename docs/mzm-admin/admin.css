@@ -15,6 +15,7 @@ p { margin: 0; }
 :focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; border-radius: 6px; }
 
 .btn { font: 600 .95rem/1 var(--font); border: 1px solid transparent; border-radius: 999px; padding: 14px 22px; cursor: pointer; background: var(--yellow); color: var(--on-yellow); transition: background .2s, transform .2s, border-color .2s, color .2s; }
+.btn { display: inline-block; text-decoration: none; text-align: center; }
 .btn:hover { background: var(--yellow-2); transform: translateY(-1px); }
 .btn:disabled { opacity: .6; cursor: wait; transform: none; }
 .btn-ghost { background: rgba(255,255,255,.04); color: var(--text); border-color: var(--line-2); }
@@ -105,6 +106,7 @@ p { margin: 0; }
   .live-dot { display: inline-flex; }
 }
 @media (max-width: 560px) {
+  #editorBtn { display: none; }
   .pager strong { min-width: 0; flex: 1; font-size: .88rem; }
   .pager { width: 100%; }
   .seg { width: 100%; } .seg button { flex: 1; }

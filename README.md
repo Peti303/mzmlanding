@@ -40,6 +40,23 @@ Ettől fogva az oldal méri a látogatókat, és a `/mzm-admin/` oldalon be tuds
 
 Biztonság: a Worker csak az `ALLOWED_ORIGIN`-ről fogad kérést, a belépés 5 hibás próbálkozás után 15 percre zárol, a munkamenet 12 órás aláírt token (a böngészőfül bezárásakor törlődik).
 
+## Oldalszerkesztő (`/mzm-admin/szerkeszto/`)
+
+A vezérlőpulton az **Oldal szerkesztése** gomb új lapon nyitja meg. Elementor/Shopify-szerű: középen az élő oldal, bal oldalon a panel.
+
+- **Szöveg:** kattints rá a kijelöléshez, dupla kattintással (vagy az „Szöveg átírása” gombbal) át lehet írni; félkövér és akcentszínű kiemelés; betűméret, vastagság, szín, igazítás, sormagasság, térközök.
+- **Képek:** csere feltöltéssel (a szerkesztő automatikusan kicsinyít és tömörít), alt szöveg, szélesség, magasság, illesztés, lekerekítés, átlátszóság; a kép sarkát húzva átméretezhető. A nyitó rész háttérképe és a három előtte–utána képpár is cserélhető.
+- **Szekciók és kártyák:** elrejtés, térköz, háttérszín; a **Szekciók** fülön sorrend és láthatóság.
+- **Eszközönként külön:** az Asztali / Tablet / Mobil váltóval minden érték csak az adott eszközre vonatkozik, a többi az eredeti reszponzív megjelenést kapja.
+- **Oldal fül:** akcentszín, hová vigyenek az „Ajánlatkérés” gombok (`https://…`, `tel:…`, `mailto:…`, vagy üresen az oldal tetejére), Facebook/Instagram link, böngészőfül címe, rövid leírás.
+- Visszavonás/újra (Ctrl+Z / Ctrl+Shift+Z), Ctrl+S = közzététel. A **Közzététel** gomb azonnal élesíti a módosításokat.
+
+Hogyan működik: a módosítások egy `content.json`-ba kerülnek (szerveren: `data/content.json`, feltöltések: `data/uploads/`; Workernél a D1 adatbázisban), az oldal betöltéskor ezt helyezi az eredeti HTML-re. Az elemeket a `docs/index.html`-ben a `data-e="…"` attribútum azonosítja – **új elem szerkeszthetővé tételéhez adj neki egyedi `data-e` kulcsot** (kisbetű, szám, pont, kötőjel).
+
+> Ingyenes Render-csomagon a fájlrendszer törlődik újraindításkor/újratelepítéskor, ezért a mentett módosítások és feltöltések is elvesznek. Tartós használathoz Render „Disk” (és `DATA_DIR` ráállítása), a Cloudflare Worker + D1 változat, vagy saját szerver kell. A „Letöltés (site.json)” gombbal bármikor kimentheted a szövegek/beállítások állapotát.
+>
+> Cloudflare Workernél a szerkesztő bevezetése után futtasd újra: `cd worker && npm run db:init` (új táblák), majd `npx wrangler deploy`.
+
 ## Saját szerveren (Node, alternatíva)
 
 ```bash
@@ -98,8 +115,10 @@ Demo adatokkal kipróbálás: `DATA_DIR=./data-demo node scripts/seed-demo.js &&
 ```
 docs/                a statikus oldal (ezt teszi ki a GitHub Pages)
 docs/mzm-admin/      az admin felület (belépés + dashboard)
+docs/mzm-admin/szerkeszto/  az oldalszerkesztő
+docs/js/content*.js  a mentett tartalom ráhelyezése az oldalra (közös logika a szerverrel)
 docs/js/config.js    statisztika-szerver címe
-worker/              Cloudflare Worker + D1: statisztika- és admin API Pages mellé
+worker/              Cloudflare Worker + D1: statisztika-, admin- és szerkesztő-API Pages mellé
 server.js, lib/      Node szerver ugyanazzal az API-val (saját tárhelyre)
 scripts/seed-demo.js demo adatok a Node szerverhez
 test/                node --test

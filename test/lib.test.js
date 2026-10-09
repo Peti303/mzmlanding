@@ -47,3 +47,59 @@ test('bot- és eszközszűrés', () => {
   assert.equal(deviceType('Mozilla/5.0 (iPad; CPU OS 17_0)', 820), 'tablet');
   assert.equal(deviceType('Mozilla/5.0 (Windows NT 10.0; Win64; x64)', 1440), 'desktop');
 });
+
+/* ---------- szerkesztő: tartalom-normalizálás ---------- */
+import { sanitizeHtml, normalizeContent, buildRules, lighten, readableOn } from '../docs/js/content-core.js';
+
+test('sanitizeHtml: csak a fehérlistás címkék maradnak', () => {
+  assert.equal(sanitizeHtml('Szia <em>világ</em><br>'), 'Szia <em>világ</em><br>');
+  assert.equal(sanitizeHtml('<script>alert(1)</script>'), '&lt;script&gt;alert(1)&lt;/script&gt;');
+  assert.equal(sanitizeHtml('<img src=x onerror=alert(1)>'), '&lt;img src=x onerror=alert(1)&gt;');
+  assert.equal(sanitizeHtml('<b onclick="x()">fet</b>'), '&lt;b onclick=&quot;x()&quot;&gt;fet</b>');
+  assert.equal(sanitizeHtml('Tom &amp; Jerry'), 'Tom &amp; Jerry');
+});
+
+test('normalizeContent: ismeretlen/veszélyes mezők eldobása', () => {
+  const c = normalizeContent({
+    els: {
+      'hero.h1-1': { html: 'Új <em>cím</em>', css: { d: { 'font-size': '40px', color: '#fff', 'background-image': 'url(javascript:1)', width: 'calc(1px)' }, x: { color: 'red' } } },
+      'EVIL KEY': { html: 'x' },
+      'ba0.render': { src: 'uploads/abc.webp' },
+      'ba0.real': { src: 'https://evil.example/x.png' },
+    },
+    sections: { order: ['hero', 'miert', 'hero', '../x'] },
+    settings: { accent: '#FF8000', ctaUrl: 'javascript:alert(1)', facebook: 'https://facebook.com/mzm', title: ' Cím ' },
+  });
+  assert.deepEqual(c.els['hero.h1-1'].css, { d: { 'font-size': '40px', color: '#fff' } });
+  assert.equal(c.els['hero.h1-1'].html, 'Új <em>cím</em>');
+  assert.equal(c.els['EVIL KEY'], undefined);
+  assert.equal(c.els['ba0.render'].src, 'uploads/abc.webp');
+  assert.equal(c.els['ba0.real'], undefined);
+  assert.deepEqual(c.sections.order, ['hero', 'miert']);
+  assert.equal(c.settings.accent, '#ff8000');
+  assert.equal(c.settings.ctaUrl, undefined);
+  assert.equal(c.settings.facebook, 'https://facebook.com/mzm');
+  assert.equal(c.settings.title, 'Cím');
+});
+
+test('normalizeContent: érvénytelen bemenetből üres, érvényes tartalom lesz', () => {
+  for (const bad of [null, undefined, 'x', 5, [], { els: 'x' }]) {
+    const c = normalizeContent(bad);
+    assert.equal(c.v, 1);
+    assert.deepEqual(c.els, {});
+  }
+});
+
+test('buildRules: eszközönkénti média-szabályok, ghost módban az elrejtés halvány', () => {
+  const content = normalizeContent({ els: { 'a.b': { css: { m: { 'font-size': '20px' }, d: { display: 'none' } } } } });
+  const rules = buildRules(content);
+  assert.ok(rules.some((r) => r.includes('max-width: 639px') && r.includes('font-size:20px !important')));
+  assert.ok(rules.some((r) => r.includes('display:none !important')));
+  assert.ok(buildRules(content, { ghost: true }).some((r) => r.includes('opacity:0.18 !important')));
+});
+
+test('színsegédek', () => {
+  assert.equal(lighten('#000000', 0.5), '#808080');
+  assert.equal(readableOn('#ffcf00'), '#17181a');
+  assert.equal(readableOn('#112233'), '#ffffff');
+});

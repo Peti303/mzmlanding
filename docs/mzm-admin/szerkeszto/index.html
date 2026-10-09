@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#17181a">
+  <title>MZM Oldalszerkesztő</title>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../css/fonts.css">
+  <link rel="stylesheet" href="szerkeszto.css">
+  <script src="../../js/config.js"></script>
+</head>
+<body class="ed">
+
+<header class="ed-top">
+  <a class="ed-back" href="../" title="Vissza a vezérlőpultra">‹ Vezérlőpult</a>
+  <strong class="ed-title">Oldalszerkesztő</strong>
+
+  <div class="ed-devices" role="tablist" aria-label="Eszköz előnézete">
+    <button role="tab" data-device="d" class="is-on" aria-selected="true" title="Számítógép">Asztali</button>
+    <button role="tab" data-device="t" aria-selected="false" title="Táblagép">Tablet</button>
+    <button role="tab" data-device="m" aria-selected="false" title="Telefon">Mobil</button>
+  </div>
+
+  <div class="ed-actions">
+    <button class="ed-icon" id="undoBtn" title="Visszavonás (Ctrl+Z)" disabled>↶</button>
+    <button class="ed-icon" id="redoBtn" title="Újra (Ctrl+Shift+Z)" disabled>↷</button>
+    <a class="ed-link" id="previewBtn" href="../../" target="_blank" rel="noopener">Megtekintés ↗</a>
+    <span class="ed-state" id="saveState" role="status">Nincs módosítás</span>
+    <button class="ed-btn" id="saveBtn" disabled>Közzététel</button>
+  </div>
+</header>
+
+<div class="ed-main">
+  <aside class="ed-side" aria-label="Szerkesztő panel">
+    <nav class="ed-tabs" role="tablist">
+      <button role="tab" data-tab="element" class="is-on" aria-selected="true">Elem</button>
+      <button role="tab" data-tab="sections" aria-selected="false">Szekciók</button>
+      <button role="tab" data-tab="page" aria-selected="false">Oldal</button>
+    </nav>
+    <div class="ed-panel" id="panel-element"></div>
+    <div class="ed-panel" id="panel-sections" hidden></div>
+    <div class="ed-panel" id="panel-page" hidden></div>
+  </aside>
+
+  <main class="ed-stage" id="stage">
+    <div class="ed-frame-box" id="frameBox">
+      <iframe id="frame" title="Az oldal szerkeszthető nézete" src="../../?mzm-edit=1"></iframe>
+    </div>
+  </main>
+</div>
+
+<div class="ed-gate" id="gate" hidden>
+  <div class="ed-gate-card">
+    <h1 id="gateTitle">Bejelentkezés szükséges</h1>
+    <p id="gateText">A szerkesztő használatához előbb jelentkezz be az admin felületen.</p>
+    <a class="ed-btn" id="gateLink" href="../">Belépés</a>
+    <button class="ed-link-btn" id="gateOffline" hidden>Folytatás mentés nélkül (csak exportálás)</button>
+  </div>
+</div>
+
+<div class="ed-toast" id="toast" role="status" hidden></div>
+<input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden>
+
+<script src="szerkeszto.js" defer></script>
+</body>
+</html>

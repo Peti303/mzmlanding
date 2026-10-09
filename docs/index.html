@@ -16,6 +16,7 @@
   <link rel="preload" href="fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/config.js"></script>
   <script src="js/boot.js"></script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"GeneralContractor","name":"MZM Construction","description":"Családi házak építése és felújítása fix áron, határidőre.","areaServed":"HU"}
@@ -48,260 +49,260 @@
 <header class="site-header" id="siteHeader">
   <div class="wrap header-in">
     <a class="brand" href="#top" data-top aria-label="MZM Construction – kezdőlap">
-      <img src="img/logo.svg" width="176" height="38" alt="MZM Construction">
+      <img data-e="header.img-1" src="img/logo.svg" width="176" height="38" alt="MZM Construction">
     </a>
     <nav class="nav" aria-label="Főmenü">
-      <a href="#elotte-utana">Előtte–utána</a>
-      <a href="#folyamat">Folyamat</a>
-      <a href="#velemenyek">Vélemények</a>
-      <a href="#gyik">GYIK</a>
+      <a data-e="header.a-1" href="#elotte-utana">Előtte–utána</a>
+      <a data-e="header.a-2" href="#folyamat">Folyamat</a>
+      <a data-e="header.a-3" href="#velemenyek">Vélemények</a>
+      <a data-e="header.a-4" href="#gyik">GYIK</a>
     </nav>
-    <a class="btn btn-sm btn-primary" href="#top" data-cta="fejlec">Ajánlatkérés</a>
+    <a data-e="header.a-5" class="btn btn-sm btn-primary" href="#top" data-cta="fejlec">Ajánlatkérés</a>
   </div>
 </header>
 
 <main>
 <!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="hero-bg" aria-hidden="true"></div>
+<section data-s="hero" data-e="sec.hero" class="hero">
+  <div data-e="hero.bg" data-bg class="hero-bg" aria-hidden="true"></div>
   <div class="wrap hero-in">
     <div class="hero-copy">
-      <p class="eyebrow reveal"><span class="dot"></span> Családi házak · Felújítás · Kulcsrakész átadás</p>
-      <h1 class="reveal">Pontosan olyan lesz az otthonod, mint a <em>látványterv</em>.</h1>
-      <p class="lead reveal">Fix áron, írásos határidővel és heti fotós beszámolóval építjük meg a házadat – hogy végig tudd, hol tart a munka.</p>
+      <p class="eyebrow reveal"><span class="dot"></span> <span data-e="hero.span-1">Családi házak · Felújítás · Kulcsrakész átadás</span></p>
+      <h1 data-e="hero.h1-1" class="reveal">Pontosan olyan lesz az otthonod, mint a <em>látványterv</em>.</h1>
+      <p data-e="hero.lead-1" class="lead reveal">Fix áron, írásos határidővel és heti fotós beszámolóval építjük meg a házadat – hogy végig tudd, hol tart a munka.</p>
       <div class="hero-actions reveal">
-        <a class="btn btn-primary btn-lg" href="#top" data-cta="hero">Ajánlatot kérek <svg class="ico"><use href="#i-arrow"/></svg></a>
-        <a class="btn btn-ghost btn-lg" href="#elotte-utana">Nézd meg a végeredményt</a>
+        <a class="btn btn-primary btn-lg" href="#top" data-cta="hero"><span data-e="hero.span-2">Ajánlatot kérek</span> <svg class="ico"><use href="#i-arrow"/></svg></a>
+        <a data-e="hero.a-1" class="btn btn-ghost btn-lg" href="#elotte-utana">Nézd meg a végeredményt</a>
       </div>
       <ul class="checks reveal">
-        <li><svg class="ico"><use href="#i-check"/></svg> Ingyenes helyszíni felmérés</li>
-        <li><svg class="ico"><use href="#i-check"/></svg> Fix áras szerződés</li>
-        <li><svg class="ico"><use href="#i-check"/></svg> Írásos határidő-vállalás</li>
+        <li data-e="hero.check-1"><svg class="ico"><use href="#i-check"/></svg> <span data-e="hero.check-1.span-1">Ingyenes helyszíni felmérés</span></li>
+        <li data-e="hero.check-2"><svg class="ico"><use href="#i-check"/></svg> <span data-e="hero.check-2.span-1">Fix áras szerződés</span></li>
+        <li data-e="hero.check-3"><svg class="ico"><use href="#i-check"/></svg> <span data-e="hero.check-3.span-1">Írásos határidő-vállalás</span></li>
       </ul>
     </div>
 
     <!-- „webapp” hangulatú projektkövető kártya -->
-    <aside class="track-card reveal" aria-label="Példa projektkövetés">
+    <aside data-e="hero.track-card-1" class="track-card reveal" aria-label="Példa projektkövetés">
       <div class="track-head">
-        <span class="live"><i></i> Projekt élő állapota</span>
-        <span class="muted">Családi ház · 142 m²</span>
+        <span class="live"><i></i> <span data-e="hero.track-card-1.span-1">Projekt élő állapota</span></span>
+        <span data-e="hero.track-card-1.muted-1" class="muted">Családi ház · 142 m²</span>
       </div>
       <ol class="track-list">
-        <li class="done"><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span> Látványterv jóváhagyva</li>
-        <li class="done"><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span> Alapozás és szerkezetépítés</li>
-        <li class="now"><span class="tick"></span> Belső kivitelezés <b>68%</b></li>
-        <li><span class="tick"></span> Átadás</li>
+        <li class="done"><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span> <span data-e="hero.track-card-1.span-2">Látványterv jóváhagyva</span> </li>
+        <li class="done"><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span> <span data-e="hero.track-card-1.span-3">Alapozás és szerkezetépítés</span> </li>
+        <li class="now"><span class="tick"></span> <span data-e="hero.track-card-1.span-4">Belső kivitelezés</span> <b data-e="hero.track-card-1.b-1">68%</b></li>
+        <li><span class="tick"></span> <span data-e="hero.track-card-1.span-5">Átadás</span> </li>
       </ol>
       <div class="bar" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" aria-label="Készültség"><i></i></div>
-      <p class="track-foot"><svg class="ico"><use href="#i-camera"/></svg> Heti fotós beszámoló az ügyfélnek</p>
+      <p class="track-foot"><svg class="ico"><use href="#i-camera"/></svg> <span data-e="hero.track-card-1.span-6">Heti fotós beszámoló az ügyfélnek</span></p>
     </aside>
   </div>
 
   <div class="wrap">
     <dl class="stats reveal">
       <!-- FIGYELEM: a számok helyőrzők – cseréld a cég valós adataira! -->
-      <div><dt data-count="12" data-suffix="+">12+</dt><dd>év tapasztalat</dd></div>
-      <div><dt data-count="180" data-suffix="+">180+</dt><dd>átadott projekt</dd></div>
-      <div><dt data-count="5" data-suffix=" év">5 év</dt><dd>kivitelezési jótállás</dd></div>
-      <div><dt data-count="98" data-suffix="%">98%</dt><dd>ajánlaná ismerősének</dd></div>
+      <div data-e="hero.div-1"><dt data-e="hero.div-1.dt-1" data-count="12" data-suffix="+">12+</dt><dd data-e="hero.div-1.dd-1">év tapasztalat</dd></div>
+      <div data-e="hero.div-2"><dt data-e="hero.div-2.dt-1" data-count="180" data-suffix="+">180+</dt><dd data-e="hero.div-2.dd-1">átadott projekt</dd></div>
+      <div data-e="hero.div-3"><dt data-e="hero.div-3.dt-1" data-count="5" data-suffix=" év">5 év</dt><dd data-e="hero.div-3.dd-1">kivitelezési jótállás</dd></div>
+      <div data-e="hero.div-4"><dt data-e="hero.div-4.dt-1" data-count="98" data-suffix="%">98%</dt><dd data-e="hero.div-4.dd-1">ajánlaná ismerősének</dd></div>
     </dl>
   </div>
 </section>
 
 <!-- ============ MIÉRT MI ============ -->
-<section class="section" id="miert">
+<section data-s="miert" data-e="sec.miert" class="section" id="miert">
   <div class="wrap">
     <header class="section-head reveal">
-      <p class="kicker">Miért az MZM</p>
-      <h2>Négy dolog, amitől nyugodtan alhatsz az építkezés alatt</h2>
+      <p data-e="miert.kicker-1" class="kicker">Miért az MZM</p>
+      <h2 data-e="miert.h2-1">Négy dolog, amitől nyugodtan alhatsz az építkezés alatt</h2>
     </header>
     <div class="bento">
-      <article class="card reveal">
+      <article data-e="miert.card-1" class="card reveal">
         <span class="card-ico"><svg class="ico"><use href="#i-tag"/></svg></span>
-        <h3>Fix ár, nincs meglepetés</h3>
-        <p>A szerződésben rögzített összeg az, amit fizetsz. Pótmunka csak a te előzetes jóváhagyásoddal.</p>
+        <h3 data-e="miert.card-1.h3-1">Fix ár, nincs meglepetés</h3>
+        <p data-e="miert.card-1.p-1">A szerződésben rögzített összeg az, amit fizetsz. Pótmunka csak a te előzetes jóváhagyásoddal.</p>
       </article>
-      <article class="card reveal">
+      <article data-e="miert.card-2" class="card reveal">
         <span class="card-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
-        <h3>Határidő, ami köt</h3>
-        <p>Írásos ütemterv, késedelem esetén kötbérrel. Mert az idő a te pénzed is.</p>
+        <h3 data-e="miert.card-2.h3-1">Határidő, ami köt</h3>
+        <p data-e="miert.card-2.p-1">Írásos ütemterv, késedelem esetén kötbérrel. Mert az idő a te pénzed is.</p>
       </article>
-      <article class="card reveal">
+      <article data-e="miert.card-3" class="card reveal">
         <span class="card-ico"><svg class="ico"><use href="#i-camera"/></svg></span>
-        <h3>Mindig képben vagy</h3>
-        <p>Egy kapcsolattartó, heti fotós beszámoló – akkor is látod a haladást, ha éppen nem vagy a helyszínen.</p>
+        <h3 data-e="miert.card-3.h3-1">Mindig képben vagy</h3>
+        <p data-e="miert.card-3.p-1">Egy kapcsolattartó, heti fotós beszámoló – akkor is látod a haladást, ha éppen nem vagy a helyszínen.</p>
       </article>
-      <article class="card reveal">
+      <article data-e="miert.card-4" class="card reveal">
         <span class="card-ico"><svg class="ico"><use href="#i-shield"/></svg></span>
-        <h3>5 év jótállás</h3>
-        <p>Átadáskor teljes dokumentációt kapsz, utána pedig a munkánkra jótállást vállalunk.</p>
+        <h3 data-e="miert.card-4.h3-1">5 év jótállás</h3>
+        <p data-e="miert.card-4.p-1">Átadáskor teljes dokumentációt kapsz, utána pedig a munkánkra jótállást vállalunk.</p>
       </article>
     </div>
   </div>
 </section>
 
 <!-- ============ ELŐTTE–UTÁNA ============ -->
-<section class="section section-alt" id="elotte-utana">
+<section data-s="elotte-utana" data-e="sec.elotte-utana" class="section section-alt" id="elotte-utana">
   <div class="wrap">
     <header class="section-head reveal">
-      <p class="kicker">Látványterv vs. valóság</p>
-      <h2>Amit a tervben látsz, azt kapod az átadáskor</h2>
-      <p class="sub"><span class="hint-fine">Húzd az egeret a képen – a vonal követi a kurzort.</span><span class="hint-coarse">Húzd el az ujjad a képen.</span> Ugyanaz a nézőpont, bal oldalon a terv, jobb oldalon a kész munka.</p>
+      <p data-e="elotte-utana.kicker-1" class="kicker">Látványterv vs. valóság</p>
+      <h2 data-e="elotte-utana.h2-1">Amit a tervben látsz, azt kapod az átadáskor</h2>
+      <p class="sub"><span data-e="elotte-utana.span-1" class="hint-fine">Húzd az egeret a képen – a vonal követi a kurzort.</span><span data-e="elotte-utana.span-2" class="hint-coarse">Húzd el az ujjad a képen.</span> <span data-e="elotte-utana.span-3">Ugyanaz a nézőpont, bal oldalon a terv, jobb oldalon a kész munka.</span></p>
     </header>
 
     <div class="ba-tabs reveal" role="tablist" aria-label="Projektek">
-      <button role="tab" class="ba-tab is-active" aria-selected="true" data-ba="0">Családi ház</button>
-      <button role="tab" class="ba-tab" aria-selected="false" data-ba="1">Nappali</button>
-      <button role="tab" class="ba-tab" aria-selected="false" data-ba="2">Fürdőszoba</button>
+      <button data-e="elotte-utana.button-1" role="tab" class="ba-tab is-active" aria-selected="true" data-ba="0">Családi ház</button>
+      <button data-e="elotte-utana.button-2" role="tab" class="ba-tab" aria-selected="false" data-ba="1">Nappali</button>
+      <button data-e="elotte-utana.button-3" role="tab" class="ba-tab" aria-selected="false" data-ba="2">Fürdőszoba</button>
     </div>
 
     <!-- A képpárok: terv (render) + kész (real), azonos kameraállásból -->
-    <div class="ba reveal" id="ba" role="group" aria-label="Látványterv és megvalósult állapot összehasonlítása">
-      <img class="ba-img ba-render" src="img/projects/house-render.jpg" alt="Látványterv" width="1600" height="1000" decoding="async">
+    <div data-e="elotte-utana.ba-1" class="ba reveal" id="ba" role="group" aria-label="Látványterv és megvalósult állapot összehasonlítása">
+      <img data-e="ba0.render" class="ba-img ba-render" src="img/projects/house-render.jpg" alt="Látványterv" width="1600" height="1000" decoding="async">
       <div class="ba-real">
-        <img class="ba-img" src="img/projects/house-real.jpg" alt="Megvalósult állapot" width="1600" height="1000" decoding="async">
+        <img data-e="ba0.real" class="ba-img" src="img/projects/house-real.jpg" alt="Megvalósult állapot" width="1600" height="1000" decoding="async">
       </div>
-      <span class="ba-label ba-label-l">Látványterv</span>
-      <span class="ba-label ba-label-r">Megvalósult</span>
+      <span data-e="elotte-utana.ba-1.span-1" class="ba-label ba-label-l">Látványterv</span>
+      <span data-e="elotte-utana.ba-1.span-2" class="ba-label ba-label-r">Megvalósult</span>
       <div class="ba-line" aria-hidden="true"><span class="ba-handle"><svg class="ico"><use href="#i-move"/></svg></span></div>
       <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Csúszka: látványterv ↔ megvalósult">
     </div>
 
     <div class="center reveal">
-      <a class="btn btn-primary btn-lg" href="#top" data-cta="elotte-utana">Ilyen otthont szeretnék <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-primary btn-lg" href="#top" data-cta="elotte-utana"><span data-e="elotte-utana.span-4">Ilyen otthont szeretnék</span> <svg class="ico"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
 
 <!-- ============ SZOLGÁLTATÁSOK ============ -->
-<section class="section" id="szolgaltatasok">
+<section data-s="szolgaltatasok" data-e="sec.szolgaltatasok" class="section" id="szolgaltatasok">
   <div class="wrap">
     <header class="section-head reveal">
-      <p class="kicker">Amit vállalunk</p>
-      <h2>Az első ötlettől a kulcsrakész átadásig</h2>
+      <p data-e="szolgaltatasok.kicker-1" class="kicker">Amit vállalunk</p>
+      <h2 data-e="szolgaltatasok.h2-1">Az első ötlettől a kulcsrakész átadásig</h2>
     </header>
     <div class="services">
-      <div class="service reveal"><svg class="ico"><use href="#i-home"/></svg><div><h3>Új építésű családi ház</h3><p>Alapozástól a költözésig, egy kézből.</p></div></div>
-      <div class="service reveal"><svg class="ico"><use href="#i-wrench"/></svg><div><h3>Teljes körű felújítás</h3><p>Lakás vagy ház, a bontástól a festésig.</p></div></div>
-      <div class="service reveal"><svg class="ico"><use href="#i-layers"/></svg><div><h3>Belső átalakítás, burkolás</h3><p>Fürdő, konyha, nappali – precízen.</p></div></div>
-      <div class="service reveal"><svg class="ico"><use href="#i-ruler"/></svg><div><h3>Bővítés, tetőtér-beépítés</h3><p>Több tér a meglévő otthonodban.</p></div></div>
+      <div data-e="szolgaltatasok.service-1" class="service reveal"><svg class="ico"><use href="#i-home"/></svg><div><h3 data-e="szolgaltatasok.service-1.h3-1">Új építésű családi ház</h3><p data-e="szolgaltatasok.service-1.p-1">Alapozástól a költözésig, egy kézből.</p></div></div>
+      <div data-e="szolgaltatasok.service-2" class="service reveal"><svg class="ico"><use href="#i-wrench"/></svg><div><h3 data-e="szolgaltatasok.service-2.h3-1">Teljes körű felújítás</h3><p data-e="szolgaltatasok.service-2.p-1">Lakás vagy ház, a bontástól a festésig.</p></div></div>
+      <div data-e="szolgaltatasok.service-3" class="service reveal"><svg class="ico"><use href="#i-layers"/></svg><div><h3 data-e="szolgaltatasok.service-3.h3-1">Belső átalakítás, burkolás</h3><p data-e="szolgaltatasok.service-3.p-1">Fürdő, konyha, nappali – precízen.</p></div></div>
+      <div data-e="szolgaltatasok.service-4" class="service reveal"><svg class="ico"><use href="#i-ruler"/></svg><div><h3 data-e="szolgaltatasok.service-4.h3-1">Bővítés, tetőtér-beépítés</h3><p data-e="szolgaltatasok.service-4.p-1">Több tér a meglévő otthonodban.</p></div></div>
     </div>
   </div>
 </section>
 
 <!-- ============ FOLYAMAT ============ -->
-<section class="section section-alt" id="folyamat">
+<section data-s="folyamat" data-e="sec.folyamat" class="section section-alt" id="folyamat">
   <div class="wrap">
     <header class="section-head reveal">
-      <p class="kicker">Így dolgozunk</p>
-      <h2>4 lépés, amit végig tudsz követni</h2>
+      <p data-e="folyamat.kicker-1" class="kicker">Így dolgozunk</p>
+      <h2 data-e="folyamat.h2-1">4 lépés, amit végig tudsz követni</h2>
     </header>
     <ol class="steps">
-      <li class="step reveal"><span class="step-n">1</span><h3>Egyeztetés</h3><p>Meghallgatjuk az elképzeléseidet, és megnézzük a helyszínt.</p></li>
-      <li class="step reveal"><span class="step-n">2</span><h3>Terv és fix ajánlat</h3><p>Látványterv és tételes, fix árú ajánlat – kötelezettség nélkül.</p></li>
-      <li class="step reveal"><span class="step-n">3</span><h3>Kivitelezés</h3><p>Ütemterv szerint, heti fotós beszámolóval.</p></li>
-      <li class="step reveal"><span class="step-n">4</span><h3>Átadás és jótállás</h3><p>Közös bejárás, dokumentáció, jótállás.</p></li>
+      <li data-e="folyamat.step-1" class="step reveal"><span data-e="folyamat.step-1.span-1" class="step-n">1</span><h3 data-e="folyamat.step-1.h3-1">Egyeztetés</h3><p data-e="folyamat.step-1.p-1">Meghallgatjuk az elképzeléseidet, és megnézzük a helyszínt.</p></li>
+      <li data-e="folyamat.step-2" class="step reveal"><span data-e="folyamat.step-2.span-1" class="step-n">2</span><h3 data-e="folyamat.step-2.h3-1">Terv és fix ajánlat</h3><p data-e="folyamat.step-2.p-1">Látványterv és tételes, fix árú ajánlat – kötelezettség nélkül.</p></li>
+      <li data-e="folyamat.step-3" class="step reveal"><span data-e="folyamat.step-3.span-1" class="step-n">3</span><h3 data-e="folyamat.step-3.h3-1">Kivitelezés</h3><p data-e="folyamat.step-3.p-1">Ütemterv szerint, heti fotós beszámolóval.</p></li>
+      <li data-e="folyamat.step-4" class="step reveal"><span data-e="folyamat.step-4.span-1" class="step-n">4</span><h3 data-e="folyamat.step-4.h3-1">Átadás és jótállás</h3><p data-e="folyamat.step-4.p-1">Közös bejárás, dokumentáció, jótállás.</p></li>
     </ol>
     <div class="center reveal">
-      <a class="btn btn-primary btn-lg" href="#top" data-cta="folyamat">Kezdjük el <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-primary btn-lg" href="#top" data-cta="folyamat"><span data-e="folyamat.span-1">Kezdjük el</span> <svg class="ico"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
 
 <!-- ============ VÉLEMÉNYEK ============ -->
-<section class="section" id="velemenyek">
+<section data-s="velemenyek" data-e="sec.velemenyek" class="section" id="velemenyek">
   <div class="wrap">
     <header class="section-head reveal">
-      <p class="kicker">Ügyfeleink szavaival</p>
-      <h2>Akik már beköltöztek</h2>
+      <p data-e="velemenyek.kicker-1" class="kicker">Ügyfeleink szavaival</p>
+      <h2 data-e="velemenyek.h2-1">Akik már beköltöztek</h2>
     </header>
     <!-- FIGYELEM: a vélemények helyőrzők – cseréld valós, engedéllyel idézett ügyfélvéleményekre! -->
     <div class="reviews">
-      <figure class="review reveal">
+      <figure data-e="velemenyek.review-1" class="review reveal">
         <div class="stars" role="img" aria-label="5 csillag"><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg></div>
-        <blockquote>„Féltünk, hogy a végeredmény más lesz, mint a terv. Az átadáskor szó szerint ugyanazt kaptuk – és az ár sem változott egy forintot sem."</blockquote>
-        <figcaption><span class="avatar">KB</span><div><b>Kovács Balázs és Réka</b><small>Családi ház · 142 m²</small></div></figcaption>
+        <blockquote data-e="velemenyek.review-1.blockquote-1">„Féltünk, hogy a végeredmény más lesz, mint a terv. Az átadáskor szó szerint ugyanazt kaptuk – és az ár sem változott egy forintot sem."</blockquote>
+        <figcaption><span data-e="velemenyek.review-1.span-1" class="avatar">KB</span><div><b data-e="velemenyek.review-1.b-1">Kovács Balázs és Réka</b><small data-e="velemenyek.review-1.small-1">Családi ház · 142 m²</small></div></figcaption>
       </figure>
-      <figure class="review reveal">
+      <figure data-e="velemenyek.review-2" class="review reveal">
         <div class="stars" role="img" aria-label="5 csillag"><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg></div>
-        <blockquote>„A heti fotós beszámoló miatt végig nyugodt voltam, pedig külföldön dolgozom. Határidőre készültek el, tisztán adták át."</blockquote>
-        <figcaption><span class="avatar">SN</span><div><b>Szabó Nóra</b><small>Teljes felújítás · 96 m²</small></div></figcaption>
+        <blockquote data-e="velemenyek.review-2.blockquote-1">„A heti fotós beszámoló miatt végig nyugodt voltam, pedig külföldön dolgozom. Határidőre készültek el, tisztán adták át."</blockquote>
+        <figcaption><span data-e="velemenyek.review-2.span-1" class="avatar">SN</span><div><b data-e="velemenyek.review-2.b-1">Szabó Nóra</b><small data-e="velemenyek.review-2.small-1">Teljes felújítás · 96 m²</small></div></figcaption>
       </figure>
-      <figure class="review reveal">
+      <figure data-e="velemenyek.review-3" class="review reveal">
         <div class="stars" role="img" aria-label="5 csillag"><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg><svg class="ico"><use href="#i-star"/></svg></div>
-        <blockquote>„Három ajánlatot kértem, az övék volt a legátláthatóbb. Minden tétel le volt írva, pótmunkát csak az engedélyemmel végeztek."</blockquote>
-        <figcaption><span class="avatar">TG</span><div><b>Tóth Gábor</b><small>Bővítés, tetőtér · 58 m²</small></div></figcaption>
+        <blockquote data-e="velemenyek.review-3.blockquote-1">„Három ajánlatot kértem, az övék volt a legátláthatóbb. Minden tétel le volt írva, pótmunkát csak az engedélyemmel végeztek."</blockquote>
+        <figcaption><span data-e="velemenyek.review-3.span-1" class="avatar">TG</span><div><b data-e="velemenyek.review-3.b-1">Tóth Gábor</b><small data-e="velemenyek.review-3.small-1">Bővítés, tetőtér · 58 m²</small></div></figcaption>
       </figure>
     </div>
     <div class="center reveal">
-      <a class="btn btn-primary btn-lg" href="#top" data-cta="velemeny">Én is ilyen élményt szeretnék <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-primary btn-lg" href="#top" data-cta="velemeny"><span data-e="velemenyek.span-1">Én is ilyen élményt szeretnék</span> <svg class="ico"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
 
 <!-- ============ GYIK ============ -->
-<section class="section section-alt" id="gyik">
+<section data-s="gyik" data-e="sec.gyik" class="section section-alt" id="gyik">
   <div class="wrap narrow">
     <header class="section-head reveal">
-      <p class="kicker">Gyakori kérdések</p>
-      <h2>Amit érdemes tudni, mielőtt belevágsz</h2>
+      <p data-e="gyik.kicker-1" class="kicker">Gyakori kérdések</p>
+      <h2 data-e="gyik.h2-1">Amit érdemes tudni, mielőtt belevágsz</h2>
     </header>
     <div class="faq reveal">
-      <details open>
-        <summary>Mennyibe kerül az ajánlatkérés?<svg class="ico"><use href="#i-plus"/></svg></summary>
-        <p>Semmibe. Az egyeztetés és a helyszíni felmérés ingyenes és kötelezettség nélküli. Az ajánlat tételes, fix árú.</p>
+      <details data-e="gyik.faq-1" open>
+        <summary><span data-e="gyik.faq-1.span-1">Mennyibe kerül az ajánlatkérés?</span><svg class="ico"><use href="#i-plus"/></svg></summary>
+        <p data-e="gyik.faq-1.p-1">Semmibe. Az egyeztetés és a helyszíni felmérés ingyenes és kötelezettség nélküli. Az ajánlat tételes, fix árú.</p>
       </details>
-      <details>
-        <summary>Mennyi idő alatt készül el egy ház?<svg class="ico"><use href="#i-plus"/></svg></summary>
-        <p>A méretétől és a műszaki tartalomtól függ. A pontos határidőt a szerződésben, ütemtervvel rögzítjük, és vállaljuk is.</p>
+      <details data-e="gyik.faq-2">
+        <summary><span data-e="gyik.faq-2.span-1">Mennyi idő alatt készül el egy ház?</span><svg class="ico"><use href="#i-plus"/></svg></summary>
+        <p data-e="gyik.faq-2.p-1">A méretétől és a műszaki tartalomtól függ. A pontos határidőt a szerződésben, ütemtervvel rögzítjük, és vállaljuk is.</p>
       </details>
-      <details>
-        <summary>Mi történik, ha változik az anyagár vagy többet kell dolgozni?<svg class="ico"><use href="#i-plus"/></svg></summary>
-        <p>A szerződéses ár fix. Pótmunkát csak a te előzetes, írásos jóváhagyásoddal végzünk, előre megadott áron.</p>
+      <details data-e="gyik.faq-3">
+        <summary><span data-e="gyik.faq-3.span-1">Mi történik, ha változik az anyagár vagy többet kell dolgozni?</span><svg class="ico"><use href="#i-plus"/></svg></summary>
+        <p data-e="gyik.faq-3.p-1">A szerződéses ár fix. Pótmunkát csak a te előzetes, írásos jóváhagyásoddal végzünk, előre megadott áron.</p>
       </details>
-      <details>
-        <summary>Hogyan fizetek?<svg class="ico"><use href="#i-plus"/></svg></summary>
-        <p>Teljesítéshez kötött részletekben: mindig csak azért fizetsz, ami már elkészült.</p>
+      <details data-e="gyik.faq-4">
+        <summary><span data-e="gyik.faq-4.span-1">Hogyan fizetek?</span><svg class="ico"><use href="#i-plus"/></svg></summary>
+        <p data-e="gyik.faq-4.p-1">Teljesítéshez kötött részletekben: mindig csak azért fizetsz, ami már elkészült.</p>
       </details>
-      <details>
-        <summary>Milyen garanciát vállaltok?<svg class="ico"><use href="#i-plus"/></svg></summary>
-        <p>5 év jótállást a kivitelezésre. Átadáskor teljes dokumentációt kapsz, hiba esetén pedig gyorsan intézkedünk.</p>
+      <details data-e="gyik.faq-5">
+        <summary><span data-e="gyik.faq-5.span-1">Milyen garanciát vállaltok?</span><svg class="ico"><use href="#i-plus"/></svg></summary>
+        <p data-e="gyik.faq-5.p-1">5 év jótállást a kivitelezésre. Átadáskor teljes dokumentációt kapsz, hiba esetén pedig gyorsan intézkedünk.</p>
       </details>
     </div>
   </div>
 </section>
 
 <!-- ============ ZÁRÓ CTA ============ -->
-<section class="final">
+<section data-s="zaro" data-e="sec.zaro" class="final">
   <div class="wrap">
-    <div class="final-card reveal">
-      <p class="kicker">Havonta korlátozott számú projektet vállalunk</p>
-      <h2>Kezdjük el a te álmaid otthonát</h2>
-      <p class="sub">Kérj ingyenes, kötelezettség nélküli ajánlatot – 24 órán belül jelentkezünk.</p>
-      <a class="btn btn-primary btn-lg" href="#top" data-cta="zaro">Ajánlatot kérek <svg class="ico"><use href="#i-arrow"/></svg></a>
+    <div data-e="zaro.final-card-1" class="final-card reveal">
+      <p data-e="zaro.final-card-1.kicker-1" class="kicker">Havonta korlátozott számú projektet vállalunk</p>
+      <h2 data-e="zaro.final-card-1.h2-1">Kezdjük el a te álmaid otthonát</h2>
+      <p data-e="zaro.final-card-1.sub-1" class="sub">Kérj ingyenes, kötelezettség nélküli ajánlatot – 24 órán belül jelentkezünk.</p>
+      <a class="btn btn-primary btn-lg" href="#top" data-cta="zaro"><span data-e="zaro.final-card-1.span-1">Ajánlatot kérek</span> <svg class="ico"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
 </main>
 
-<footer class="footer">
+<footer data-e="sec.footer" class="footer">
   <div class="wrap footer-in">
-    <img src="img/logo.svg" width="158" height="34" alt="MZM Construction" loading="lazy">
-    <p class="muted">© <span id="year">2026</span> MZM Construction. Minden jog fenntartva.</p>
+    <img data-e="footer.img-1" src="img/logo.svg" width="158" height="34" alt="MZM Construction" loading="lazy">
+    <p class="muted">© <span data-e="footer.span-1" id="year">2026</span> <span data-e="footer.span-2">MZM Construction. Minden jog fenntartva.</span></p>
     <div class="social">
       <a href="#" aria-label="Facebook"><svg class="ico"><use href="#i-fb"/></svg></a>
       <a href="#" aria-label="Instagram"><svg class="ico"><use href="#i-ig"/></svg></a>
     </div>
-    <p class="muted small">Az oldal süti nélkül, anonim módon méri a látogatottságot (személyes adat nem kerül tárolásra).</p>
+    <p data-e="footer.muted-1" class="muted small">Az oldal süti nélkül, anonim módon méri a látogatottságot (személyes adat nem kerül tárolásra).</p>
   </div>
 </footer>
 
 <!-- Mobil ragadós ajánlatkérés sáv -->
 <div class="sticky-cta" id="stickyCta" aria-hidden="true">
-  <a class="btn btn-primary btn-block" href="#top" data-cta="sticky" tabindex="-1">Ajánlatkérés <svg class="ico"><use href="#i-arrow"/></svg></a>
+  <a class="btn btn-primary btn-block" href="#top" data-cta="sticky" tabindex="-1"><span data-e="sticky.span-1">Ajánlatkérés</span> <svg class="ico"><use href="#i-arrow"/></svg></a>
 </div>
 
-<script src="js/config.js"></script>
+<script type="module" src="js/content.js"></script>
 <script src="js/main.js" defer></script>
 </body>
 </html>

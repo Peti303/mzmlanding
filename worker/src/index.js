@@ -2,9 +2,11 @@
 //   POST /api/track              – látogatás / ajánlatkérés-kattintás mérése
 //   POST /mzm-admin/api/login    – belépés (visszaad egy Bearer tokent)
 //   GET  /mzm-admin/api/me, /stats, POST /logout
+//   GET  /api/content (nyilvános) · PUT /mzm-admin/api/content · POST /mzm-admin/api/upload · GET /uploads/<név>
 import { getStats, statsSpan } from '../../lib/analytics.js';
 import { dayKey, eachDay } from '../../lib/dates.js';
 import { isBot, deviceType, classifySource, clean } from '../../lib/classify.js';
+import { normalizeContent, tooLarge } from '../../docs/js/content-core.js';
 
 const enc = new TextEncoder();
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
@@ -66,7 +68,7 @@ function corsHeaders(request, env) {
   if (origin && origin === env.ALLOWED_ORIGIN) {
     h['Access-Control-Allow-Origin'] = origin;
     h['Access-Control-Allow-Headers'] = 'Authorization, Content-Type';
-    h['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
+    h['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS';
     h['Access-Control-Max-Age'] = '86400';
   }
   return h;
@@ -141,6 +143,61 @@ async function handleStats(request, env, cors, url) {
   return json(getStats(period, offset, now, (d) => byDay.get(d) || []), 200, cors);
 }
 
+/* ---------- szerkesztő: tartalom és képek ---------- */
+const MAX_UPLOAD = 1_200_000; // a D1 sorméret-korlátja (2 MB) miatt, base64-ben tárolva
+const MAGIC = [
+  ['jpg', 'image/jpeg', (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff],
+  ['png', 'image/png', (b) => b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47],
+  ['gif', 'image/gif', (b) => b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x38],
+  ['webp', 'image/webp', (b) => String.fromCharCode(...b.slice(0, 4)) === 'RIFF' && String.fromCharCode(...b.slice(8, 12)) === 'WEBP'],
+  ['avif', 'image/avif', (b) => String.fromCharCode(...b.slice(4, 12)) === 'ftypavif'],
+];
+const toB64 = (bytes) => {
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+};
+const fromB64 = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+async function handleGetContent(env, cors) {
+  const row = await env.DB.prepare("SELECT v FROM kv WHERE k = 'content'").first();
+  return json(row ? JSON.parse(row.v) : {}, 200, cors);
+}
+
+async function handlePutContent(request, env, cors) {
+  const raw = await request.text();
+  if (raw.length > 320 * 1024) return json({ error: 'Hibás vagy túl nagy kérés.' }, 413, cors);
+  let body;
+  try { body = JSON.parse(raw); } catch { return json({ error: 'Hibás kérés.' }, 400, cors); }
+  const clean = normalizeContent(body);
+  if (tooLarge(clean)) return json({ error: 'Hibás vagy túl nagy kérés.' }, 413, cors);
+  const prev = await env.DB.prepare("SELECT v FROM kv WHERE k = 'content'").first();
+  const stmts = [env.DB.prepare("INSERT INTO kv (k, v) VALUES ('content', ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").bind(JSON.stringify(clean))];
+  if (prev) stmts.push(env.DB.prepare("INSERT INTO kv (k, v) VALUES ('content_prev', ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").bind(prev.v));
+  await env.DB.batch(stmts);
+  return json({ ok: true, content: clean }, 200, cors);
+}
+
+async function handleUpload(request, env, cors) {
+  const buf = new Uint8Array(await request.arrayBuffer());
+  if (!buf.length || buf.length > MAX_UPLOAD) return json({ error: 'A kép túl nagy vagy hibás (max. kb. 1,2 MB – a szerkesztő automatikusan kicsinyít).' }, 413, cors);
+  const kind = MAGIC.find(([, , test]) => test(buf));
+  if (!kind) return json({ error: 'Csak JPG, PNG, WebP, GIF vagy AVIF kép tölthető fel.' }, 415, cors);
+  const hash = new Uint8Array(await crypto.subtle.digest('SHA-256', buf));
+  const name = [...hash.slice(0, 12)].map((b) => b.toString(16).padStart(2, '0')).join('') + '.' + kind[0];
+  await env.DB.prepare('INSERT OR IGNORE INTO media (name, mime, data) VALUES (?, ?, ?)').bind(name, kind[1], toB64(buf)).run();
+  return json({ ok: true, src: `uploads/${name}` }, 200, cors);
+}
+
+async function handleMedia(name, env, cors) {
+  if (!/^[a-f0-9]{24}\.(jpg|png|gif|webp|avif)$/.test(name)) return json({ error: 'Nem található.' }, 404, cors);
+  const row = await env.DB.prepare('SELECT mime, data FROM media WHERE name = ?').bind(name).first();
+  if (!row) return json({ error: 'Nem található.' }, 404, cors);
+  return new Response(fromB64(row.data), {
+    headers: { 'Content-Type': row.mime, 'Cache-Control': 'public, max-age=31536000, immutable', 'X-Content-Type-Options': 'nosniff', 'Cross-Origin-Resource-Policy': 'cross-origin', ...cors },
+  });
+}
+
 export default {
   async fetch(request, env) {
     const cors = corsHeaders(request, env);
@@ -148,6 +205,8 @@ export default {
     try {
       if (request.method === 'OPTIONS') return empty(204, cors);
       if (url.pathname === '/healthz') return json({ ok: true }, 200, cors);
+      if (url.pathname === '/api/content' && request.method === 'GET') return await handleGetContent(env, cors);
+      if (url.pathname.startsWith('/uploads/') && request.method === 'GET') return await handleMedia(url.pathname.slice('/uploads/'.length), env, cors);
       if (url.pathname === '/api/track' && request.method === 'POST') return await handleTrack(request, env, cors);
 
       if (url.pathname.startsWith('/mzm-admin/api/')) {
@@ -158,6 +217,14 @@ export default {
         if (route === '/login' && request.method === 'POST') return await handleLogin(request, env, cors);
         if (route === '/me' && request.method === 'GET') return json({ authenticated: !!session }, 200, cors);
         if (route === '/logout' && request.method === 'POST') return json({ ok: true }, 200, cors);
+        if (route === '/content' && request.method === 'PUT') {
+          if (!session) return json({ error: 'Nincs bejelentkezve.' }, 401, cors);
+          return await handlePutContent(request, env, cors);
+        }
+        if (route === '/upload' && request.method === 'POST') {
+          if (!session) return json({ error: 'Nincs bejelentkezve.' }, 401, cors);
+          return await handleUpload(request, env, cors);
+        }
         if (route === '/stats' && request.method === 'GET') {
           if (!session) return json({ error: 'Nincs bejelentkezve.' }, 401, cors);
           return await handleStats(request, env, cors, url);
