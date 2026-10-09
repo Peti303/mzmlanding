@@ -6,8 +6,11 @@
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* ---------------- látogatottság mérése (süti nélkül, anonim) ---------------- */
+  const API_BASE = (window.MZM_CONFIG || {}).apiBase;
   function track(type, cta) {
+    if (typeof API_BASE !== 'string') return; // nincs statisztika-szerver beállítva
     try {
+      const url = API_BASE.replace(/\/$/, '') + '/api/track';
       const body = JSON.stringify({
         type,
         cta,
@@ -15,8 +18,9 @@
         referrer: document.referrer.slice(0, 300),
         width: innerWidth,
       });
-      if (!(navigator.sendBeacon && navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' })))) {
-        fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true });
+      // text/plain: így külön domainre küldve sem kell CORS-preflight
+      if (!(navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: 'text/plain;charset=UTF-8' })))) {
+        fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body, keepalive: true });
       }
     } catch (_) { /* a mérés sosem akaszthatja meg az oldalt */ }
   }
@@ -80,9 +84,9 @@
 
   /* ---------------- előtte–utána csúszka ---------------- */
   const PAIRS = [
-    { render: '/img/projects/house-render.jpg', real: '/img/projects/house-real.jpg' },
-    { render: '/img/projects/living-render.jpg', real: '/img/projects/living-real.jpg' },
-    { render: '/img/projects/bath-render.jpg', real: '/img/projects/bath-real.jpg' },
+    { render: 'img/projects/house-render.jpg', real: 'img/projects/house-real.jpg' },
+    { render: 'img/projects/living-render.jpg', real: 'img/projects/living-real.jpg' },
+    { render: 'img/projects/bath-render.jpg', real: 'img/projects/bath-real.jpg' },
   ];
   const ba = $('#ba');
   if (ba) {

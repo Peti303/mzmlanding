@@ -1,6 +1,12 @@
 (() => {
   'use strict';
-  const API = '/mzm-admin/api';
+  const BASE = (window.MZM_CONFIG || {}).apiBase;
+  const API = (typeof BASE === 'string' ? BASE.replace(/\/$/, '') : '') + '/mzm-admin/api';
+  // külön domainről (pl. GitHub Pages + Worker) a süti nem megy át, ott Bearer tokent használunk
+  const CROSS = typeof BASE === 'string' && BASE !== '';
+  const TOKEN_KEY = 'mzm_admin_token';
+  const getToken = () => { try { return sessionStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; } };
+  const setToken = (t) => { try { t ? sessionStorage.setItem(TOKEN_KEY, t) : sessionStorage.removeItem(TOKEN_KEY); } catch (_) {} };
   const $ = (id) => document.getElementById(id);
   const SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -25,7 +31,9 @@
   };
 
   async function api(path, opts) {
-    const res = await fetch(API + path, { credentials: 'same-origin', ...opts });
+    const headers = { ...(opts && opts.headers) };
+    if (CROSS && getToken()) headers.Authorization = 'Bearer ' + getToken();
+    const res = await fetch(API + path, { credentials: CROSS ? 'omit' : 'same-origin', ...opts, headers });
     if (res.status === 401 && path !== '/login') { show(false); throw new Error('unauth'); }
     return res;
   }
@@ -42,12 +50,13 @@
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) { err.textContent = j.error || 'Sikertelen belépés.'; err.hidden = false; $('password').select(); }
-      else { $('password').value = ''; show(true); }
+      else { if (CROSS) setToken(j.token); $('password').value = ''; show(true); }
     } catch (_) { err.textContent = 'Hálózati hiba, próbáld újra.'; err.hidden = false; }
     btn.disabled = false; btn.textContent = 'Belépés';
   });
   $('logoutBtn').addEventListener('click', async () => {
-    await fetch(API + '/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
+    await api('/logout', { method: 'POST' }).catch(() => {});
+    setToken('');
     show(false);
   });
 
@@ -212,6 +221,11 @@
   let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => state.data && drawChart(state.data), 120); });
 
   /* ---------- indulás ---------- */
-  fetch(API + '/me', { credentials: 'same-origin' })
-    .then((r) => r.json()).then((j) => show(!!j.authenticated)).catch(() => show(false));
+  if (BASE === null) {
+    show(false);
+    $('noBackend').hidden = false;
+    $('loginForm').querySelectorAll('input, button').forEach((el) => { el.disabled = true; });
+  } else {
+    api('/me').then((r) => r.json()).then((j) => show(!!j.authenticated)).catch(() => show(false));
+  }
 })();

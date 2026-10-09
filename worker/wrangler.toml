@@ -1,0 +1,15 @@
+# Cloudflare Worker + D1: a GitHub Pages-en futó oldal statisztika- és admin-háttere.
+# Telepítés: lásd a README „GitHub Pages” szakaszát.
+name = "mzm-stats"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+# Az oldal pontos címe (sémával, útvonal nélkül) – csak innen fogad mérést és admin kérést
+ALLOWED_ORIGIN = "https://peti303.github.io"
+ADMIN_USERNAME = "admin"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mzm-stats"
+database_id = "CSERELD-LE-A-wrangler-d1-create-ALTAL-ADOTT-ID-RA"

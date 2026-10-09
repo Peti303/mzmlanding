@@ -89,7 +89,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background:
     linear-gradient(90deg, var(--bg) 0%, rgba(23, 24, 26, 0.88) 38%, rgba(23, 24, 26, 0.45) 100%),
     linear-gradient(0deg, var(--bg) 0%, rgba(23, 24, 26, 0) 40%),
-    url("/img/projects/hero.jpg") center / cover no-repeat;
+    url("../img/projects/hero.jpg") center / cover no-repeat;
 }
 .hero-in { display: grid; gap: 40px; align-items: center; }
 .eyebrow {

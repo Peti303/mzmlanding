@@ -3,3 +3,8 @@ data/
 .env
 *.log
 data-demo/
+
+worker/node_modules/
+worker/.wrangler-state/
+worker/.wrangler/
+worker/.dev.vars

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import { config, ROOT } from './lib/env.js';
-import { addEvent, flush } from './lib/store.js';
+import { addEvent, flush, eventsForDay } from './lib/store.js';
 import { getStats } from './lib/analytics.js';
 import { dayKey } from './lib/dates.js';
 import { isBot, deviceType, classifySource, clean } from './lib/classify.js';
@@ -15,8 +15,7 @@ import {
   RateLimiter,
 } from './lib/auth.js';
 
-const PUBLIC_DIR = path.join(ROOT, 'public');
-const ADMIN_DIR = path.join(ROOT, 'admin');
+const PUBLIC_DIR = path.join(ROOT, 'docs');
 const ADMIN_PATH = '/mzm-admin';
 const COOKIE = 'mzm_admin';
 
@@ -227,7 +226,8 @@ async function handleTrack(req, res) {
 
 /* ---------------- admin ---------------- */
 function getSession(req) {
-  return readSession(parseCookies(req)[COOKIE]);
+  const m = /^Bearer (.+)$/.exec(String(req.headers.authorization || ''));
+  return readSession(m ? m[1] : parseCookies(req)[COOKIE]);
 }
 
 function cookieHeader(req, value, maxAgeSec) {
@@ -264,8 +264,9 @@ async function handleAdminApi(req, res, route) {
       return sendJson(res, 401, { error: 'Hibás felhasználónév vagy jelszó.' });
     }
     loginLimiter.reset(ip);
-    return sendJson(res, 200, { ok: true }, {
-      'Set-Cookie': cookieHeader(req, createSession(), Math.floor(config.sessionTtlMs / 1000)),
+    const token = createSession();
+    return sendJson(res, 200, { ok: true, token }, {
+      'Set-Cookie': cookieHeader(req, token, Math.floor(config.sessionTtlMs / 1000)),
     });
   }
 
@@ -278,30 +279,24 @@ async function handleAdminApi(req, res, route) {
     const url = new URL(req.url, 'http://x');
     const period = url.searchParams.get('period') === 'month' ? 'month' : 'week';
     const offset = Math.min(0, Math.max(-60, parseInt(url.searchParams.get('offset') || '0', 10) || 0));
-    return sendJson(res, 200, getStats(period, offset));
+    return sendJson(res, 200, getStats(period, offset, Date.now(), eventsForDay));
   }
 
   return sendJson(res, 404, { error: 'Nem található.' });
 }
 
 function handleAdmin(req, res, pathname) {
-  const adminHeaders = { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' };
   const route = pathname.slice(ADMIN_PATH.length) || '/';
   if (route.startsWith('/api/')) return handleAdminApi(req, res, route);
   if (pathname === ADMIN_PATH) {
     res.writeHead(301, { Location: ADMIN_PATH + '/' });
     return res.end();
   }
-  if (route === '/') {
-    return serveFile(req, res, ADMIN_DIR, 'index.html', adminHeaders) || send(res, 404, 'Not found');
-  }
-  if (route.startsWith('/assets/')) {
-    return (
-      serveFile(req, res, ADMIN_DIR, route.slice('/assets/'.length), { 'X-Robots-Tag': 'noindex' }) ||
-      send(res, 404, 'Not found')
-    );
-  }
-  return send(res, 404, 'Not found');
+  // az admin felület statikus fájl (docs/mzm-admin/), a kereső ne indexelje
+  return (
+    serveFile(req, res, PUBLIC_DIR, pathname, { 'X-Robots-Tag': 'noindex, nofollow' }) ||
+    send(res, 404, 'Not found')
+  );
 }
 
 /* ---------------- fő kezelő ---------------- */

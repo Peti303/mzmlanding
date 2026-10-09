@@ -6,16 +6,16 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#17181a">
   <title>MZM Admin – Statisztika</title>
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/fonts.css">
-  <link rel="stylesheet" href="/mzm-admin/assets/admin.css">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
 <!-- ============ Bejelentkezés ============ -->
 <main id="loginView" class="login" hidden>
   <form id="loginForm" class="login-card" autocomplete="on" novalidate>
-    <img src="/img/logo.svg" width="176" height="38" alt="MZM Construction">
+    <img src="../img/logo.svg" width="176" height="38" alt="MZM Construction">
     <h1>Bejelentkezés</h1>
     <p class="muted">Statisztika és vezérlőpult</p>
     <label>Felhasználónév
@@ -25,6 +25,7 @@
       <input id="password" name="password" type="password" autocomplete="current-password" required>
     </label>
     <p id="loginError" class="error" role="alert" hidden></p>
+    <p id="noBackend" class="error" hidden>A statisztika-szerver még nincs beállítva (lásd README: „GitHub Pages”).</p>
     <button class="btn" type="submit" id="loginBtn">Belépés</button>
   </form>
 </main>
@@ -33,7 +34,7 @@
 <div id="dashView" hidden>
   <header class="top">
     <div class="wrap top-in">
-      <div class="top-brand"><img src="/img/logo.svg" width="150" height="32" alt="MZM Construction"><span class="pill">Admin</span></div>
+      <div class="top-brand"><img src="../img/logo.svg" width="150" height="32" alt="MZM Construction"><span class="pill">Admin</span></div>
       <div class="top-actions">
         <span class="live-dot" title="Automatikus frissítés 60 másodpercenként"><i></i> <span id="updated">–</span></span>
         <button class="btn btn-ghost" id="logoutBtn" type="button">Kilépés</button>
@@ -100,6 +101,7 @@
   </main>
 </div>
 
-<script src="/mzm-admin/assets/admin.js" defer></script>
+<script src="../js/config.js"></script>
+<script src="admin.js" defer></script>
 </body>
 </html>
